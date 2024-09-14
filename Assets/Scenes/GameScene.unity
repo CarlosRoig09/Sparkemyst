@@ -263,10 +263,11 @@ MonoBehaviour:
   Lstates:
   - {fileID: 11400000, guid: 1ce8d38349f664f479022a3f10cb1ab2, type: 2}
   - {fileID: 11400000, guid: aa324c2296fce484dbf61e262dd81648, type: 2}
-  _minSpeed: 10
-  _maxSpeed: 100
+  _minSpeed: 100
+  _maxSpeed: 500
+  _speed: 0
   _speedMod: 10
-  _timeBwSpeeds: 1
+  _timeBwSpeeds: 3
   JumpForce: 0
 --- !u!1 &564095211
 GameObject:

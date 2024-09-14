@@ -58,7 +58,7 @@ public class PlayerMovement : StateController
         movementAction.RB2D = _rb2D;
         StateTransitor(Dstates["MOVEMENT"]);
         _speed = _minSpeed;
-        StartCoroutine(ModSpeed(_speedMod, _speed, _maxSpeed));
+        StartCoroutine(ModSpeed((_maxSpeed - _minSpeed)/(_timeBwSpeeds), _speed, _maxSpeed));
         Debug.Log("Go");
     }
 
@@ -72,10 +72,12 @@ public class PlayerMovement : StateController
     private IEnumerator ModSpeed(float mod, float initialSpeed, float finalSpeed)
     {
         var movementAction = (MovementAction)Dstates["MOVEMENT"].Action;
+        float currentTime = 0;
         while (_speed < _maxSpeed && _speed > 0)
         {
             yield return new WaitForFixedUpdate();
-            _speed += mod * Time.fixedDeltaTime + initialSpeed;
+            currentTime += Time.fixedDeltaTime;
+            _speed = mod * currentTime + initialSpeed;
             movementAction.Speed = _speed;
         }
         _speed = finalSpeed;
