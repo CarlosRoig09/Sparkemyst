@@ -5,7 +5,8 @@ using UnityEngine.InputSystem;
 
 public enum Inputs
 {
-    Movement
+    Movement,
+    Jump
 }
 public class InputManager : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class InputManager : MonoBehaviour
     [SerializeField]
     private InputActionAsset _actionAsset;
     private InputAction _onMovement;
+    private InputAction _onJump;
     private PlayerMovement _playerMovement;
     void Awake()
     {
@@ -29,6 +31,7 @@ public class InputManager : MonoBehaviour
             _playerInput = GetComponent<PlayerInput>();
             _playerInput.actions = _actionAsset;
             _onMovement = _playerInput.actions["Move"];
+            _onJump = _playerInput.actions["Jump"];
         }
         catch { Debug.LogError("ERROR: PlayerInput component is missing"); }
     }
@@ -36,8 +39,8 @@ public class InputManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        OnStartGame();
         _playerMovement = GameObject.Find("Player").GetComponent<PlayerMovement>();
+        OnStartGame();
     }
 
     // Update is called once per frame
@@ -48,7 +51,16 @@ public class InputManager : MonoBehaviour
 
     private void OnStartGame()
     {
-        SubscribeEvents(new Inputs[] { Inputs.Movement });
+        SubscribeEvents(new Inputs[] { Inputs.Movement, Inputs.Jump});
+        _playerMovement.OnModifyMovement += ModifyMovement;
+    }
+
+    private void ModifyMovement(bool start)
+    {
+        if (start)
+            SubscribeEvents(new Inputs[] { Inputs.Movement });
+        else
+            DesubscribeEvents(new Inputs[] { Inputs.Movement });
     }
 
     public void SubscribeEvents(Inputs[] inputs)
@@ -60,6 +72,10 @@ public class InputManager : MonoBehaviour
                 case Inputs.Movement:
                     _onMovement.started += OnStartMovement;
                     _onMovement.canceled += OnEndMovement;
+                    break;
+                case Inputs.Jump:
+                    _onJump.started += OnStartJump;
+                    _onJump.canceled += OnEndJump;
                     break;
                 default:
                     Debug.LogError("Error: This input doesn't exist");
@@ -75,7 +91,12 @@ public class InputManager : MonoBehaviour
             switch (input)
             {
                 case Inputs.Movement:
-
+                    _onMovement.started -= OnStartMovement;
+                    //_onMovement.canceled -= OnEndMovement;
+                    break;
+                case Inputs.Jump:
+                    _onJump.started -= OnStartJump;
+                    _onJump.canceled -= OnEndJump;
                     break;
                 default:
                     Debug.LogError("Error: This input doesn't exist");
@@ -86,11 +107,17 @@ public class InputManager : MonoBehaviour
 
     void OnStartMovement(InputAction.CallbackContext context)
     {
-        _playerMovement.StartMovement(context.ReadValue<Vector2>());
     }
 
     void OnEndMovement(InputAction.CallbackContext context)
     {
-        _playerMovement.PlayerEndMovement();
+    }
+
+    void OnStartJump(InputAction.CallbackContext context)
+    {
+    }
+
+    void OnEndJump(InputAction.CallbackContext context)
+    {
     }
 }

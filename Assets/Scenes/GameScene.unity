@@ -159,7 +159,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 87bb56353f479534696a4378bbc33ca8, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -173,7 +173,7 @@ CircleCollider2D:
   m_GameObject: {fileID: 81173355}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 87bb56353f479534696a4378bbc33ca8, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -259,16 +259,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 980a004a804c3854da06e6e94c4a400f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentState: {fileID: 11400000, guid: 1ce8d38349f664f479022a3f10cb1ab2, type: 2}
+  currentState: {fileID: 11400000, guid: 720173f620a658145bd0daa2206aa360, type: 2}
   Lstates:
-  - {fileID: 11400000, guid: 1ce8d38349f664f479022a3f10cb1ab2, type: 2}
-  - {fileID: 11400000, guid: aa324c2296fce484dbf61e262dd81648, type: 2}
-  _minSpeed: 100
-  _maxSpeed: 500
+  - {fileID: 11400000, guid: 720173f620a658145bd0daa2206aa360, type: 2}
+  - {fileID: 11400000, guid: 7e8e13ce2fac8444c860171f6b847933, type: 2}
+  - {fileID: 11400000, guid: 4ebb7ce2401fab3488755a8a0d7683b8, type: 2}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  _minSpeed: 10
+  _maxSpeed: 200
   _speed: 0
-  _speedMod: 10
-  _timeBwSpeeds: 3
-  JumpForce: 0
+  _timeBwSpeedStart: 0.5
+  _timeBwSpeedEnd: 0.3
+  _jumpForce: 0
+  _gravity: 0
+  _maxHeight: 10
+  _minHeight: 2
+  _timeBwJumps: 1
 --- !u!1 &564095211
 GameObject:
   m_ObjectHideFlags: 0
@@ -441,7 +449,7 @@ GameObject:
   - component: {fileID: 1988852603}
   - component: {fileID: 1988852606}
   - component: {fileID: 1988852605}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}

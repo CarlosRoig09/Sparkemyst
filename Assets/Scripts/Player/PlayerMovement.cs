@@ -1,34 +1,43 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
-public enum PlayerState
-{
-    GROUNDED,
-    JUMP,
-    DASH,
-    WALLJUMP,
-    WALLSLIDING,
-    GLIDE,
-    MOVING,
-    STILL
-}
+using UnityEngine;
 public class PlayerMovement : StateController
 {
+    [SerializeField]
+    private LayerMask groundLayer;
+
+    [Header("SpeedModifiers")]
+
     [SerializeField]
     private float _minSpeed;
     [SerializeField]
     private float _maxSpeed;
     [SerializeField]
+    private float _accelerationDistance;
+    [SerializeField]
+    private float _desaccelerationDistance;
+    [SerializeField]
     private float _speed;
     [SerializeField]
-    private float _speedMod;
+    private float _timeBwSpeedStart;
+    private Vector2 _direction;
     [SerializeField]
-    private float _timeBwSpeeds;
+    private float _timeBwSpeedEnd;
+    [Header("JumpModifiers")]
     [SerializeField]
-    private float JumpForce;
-    private PlayerState _playerState;
+    private float _jumpForce;
+    [SerializeField]
+    private float _gravity;
+    [SerializeField]
+    private float _maxHeight;
+    [SerializeField]
+    private float _minHeight;
+    [SerializeField]
+    private float _timeBwJumps;
     private Rigidbody2D _rb2D;
+    public delegate void ModifyMovement(bool start);
+    public event ModifyMovement OnModifyMovement;
 
     // Start is called before the first frame update
    protected override void Start()
@@ -39,48 +48,40 @@ public class PlayerMovement : StateController
     }
 
     // Update is called once per frame
-  protected override void Update()
-    {
-        base.Update();
-        if (_rb2D.velocity == Vector2.zero &&_speed == 0)
+  protected override void FixedUpdate()
+   {
+        base.FixedUpdate();
+        if (IsGrounded())
+            StateTransitor(Dstates["GROUNDED"]);
+        if (currentState is PlayerState currentPlayerState && (_speed != 0 || _direction != Vector2.zero))
         {
-            Debug.Log("Still");
-            _playerState = PlayerState.STILL;
-            StateTransitor(Dstates["STILL"]);
+            if (currentPlayerState.CanMove)
+                OnModifyMovement(true);
+            else
+                OnModifyMovement(false);
         }
+
+        _rb2D.velocity = new Vector2(_speed * Time.fixedDeltaTime * _direction.x, _rb2D.velocity.y);
     }
 
-    public void StartMovement(Vector2 direction)
-    {
-        StopAllCoroutines();
-        var movementAction = (MovementAction)Dstates["MOVEMENT"].Action;
-        movementAction.direction = direction;
-        movementAction.RB2D = _rb2D;
-        StateTransitor(Dstates["MOVEMENT"]);
-        _speed = _minSpeed;
-        StartCoroutine(ModSpeed((_maxSpeed - _minSpeed)/(_timeBwSpeeds), _speed, _maxSpeed));
-        Debug.Log("Go");
-    }
+    private bool IsGrounded()
+   {
+        return Physics2D.Raycast(transform.position, Vector2.down, 0.65f, groundLayer.value);
+   }
 
-    public void PlayerEndMovement()
+    public IEnumerator ModSpeed(float initialSpeed, float finalspeed, float desiredDistance, float acceleration)
     {
-        Debug.Log("Stop");
-        StopAllCoroutines();
-        StartCoroutine(ModSpeed(_speedMod * -1, _speed * -1, 0));
-    }
-
-    private IEnumerator ModSpeed(float mod, float initialSpeed, float finalSpeed)
-    {
-        var movementAction = (MovementAction)Dstates["MOVEMENT"].Action;
-        float currentTime = 0;
-        while (_speed < _maxSpeed && _speed > 0)
+        acceleration = (Mathf.Pow(finalspeed, 2) - Mathf.Pow(initialSpeed, 2)) / (2 * (desiredDistance - Mathf.Abs(transform.position.x)));
+        while (_speed <= _maxSpeed && _speed > 0)
         {
             yield return new WaitForFixedUpdate();
-            currentTime += Time.fixedDeltaTime;
-            _speed = mod * currentTime + initialSpeed;
-            movementAction.Speed = _speed;
+            desiredDistance -= Mathf.Abs(transform.position.x);
+            _speed = Mathf.Sqrt(Mathf.Pow(finalspeed, 2) - 2 * acceleration * desiredDistance);
         }
-        _speed = finalSpeed;
-        movementAction.Speed = _speed;
     }
+
+    //private IEnumerator ModJumpHeight(float mod)
+    //{
+
+    //}
 }
