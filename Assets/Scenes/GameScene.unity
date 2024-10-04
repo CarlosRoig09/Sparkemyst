@@ -272,8 +272,8 @@ MonoBehaviour:
   _desiredDccTime: 0.3
   _jumpForce: 0
   _gravity: 0
-  _maxHeight: 10
-  _minHeight: 2
+  _maxHeight: 2
+  _minHeight: 0.5
   _timeBwJumps: 1
   _jumpHeight: 0
 --- !u!1 &564095211
