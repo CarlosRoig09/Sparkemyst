@@ -7,10 +7,9 @@ public class ScriptablePlayerAction : ScriptableAction
 {
     public bool Momentum { get; set; }
 
-    public Rigidbody2D PlayerRB2D;
 
-    public Transform PlayerTransform;
-   public virtual void OnStartADAction(InputAction.CallbackContext context)
+    public PlayerMovement _playerMovement;
+    public virtual void OnStartADAction(InputAction.CallbackContext context)
    {
         Momentum = true;
    }
@@ -40,7 +39,7 @@ public class ScriptablePlayerAction : ScriptableAction
 
     }
 
-    public virtual void OnSpaceSAction(InputAction.CallbackContext context)
+    public virtual void OnStartSpaceAction(InputAction.CallbackContext context)
     {
 
     }

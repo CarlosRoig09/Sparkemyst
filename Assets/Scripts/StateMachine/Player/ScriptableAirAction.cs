@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[CreateAssetMenu(fileName = "ScriptableGroundAction", menuName = "PlayerActions/GroundAction")]
-public class ScriptableGroundAction : ScriptablePlayerAction
+[CreateAssetMenu(fileName = "ScriptableAirAction", menuName = "PlayerActions/AirAction")]
+public class ScriptableAirAction : ScriptablePlayerAction
 {
-    public float Direction = 0;
     public override void OnFinishedState()
     {
         _playerMovement.StopCoroutine();
@@ -14,7 +13,6 @@ public class ScriptableGroundAction : ScriptablePlayerAction
 
     public override void OnSetState()
     {
-        _playerMovement.ModSpeedCoroutine(Momentum);       
     }
 
     public override void OnUpdate()
@@ -28,17 +26,12 @@ public class ScriptableGroundAction : ScriptablePlayerAction
     }
     public override void OnStartADAction(InputAction.CallbackContext context)
     {
-        Momentum = true;
-        _playerMovement.ModSpeedCoroutine(Momentum);
-        Direction = context.ReadValue<Vector2>().x;
-        _playerMovement.Direction = new Vector2(Direction, _playerMovement.Direction.y);
+        //Momentum = true;
     }
 
     public override void OnEndADAction(InputAction.CallbackContext context)
     {
         Momentum = false;
-        _playerMovement.ModSpeedCoroutine(Momentum);
-        Direction = context.ReadValue<Vector2>().x;
     }
 
     public override void OnStartWAction(InputAction.CallbackContext context)
@@ -63,11 +56,9 @@ public class ScriptableGroundAction : ScriptablePlayerAction
 
     public override void OnStartSpaceAction(InputAction.CallbackContext context)
     {
-        _playerMovement.StartJump();
     }
 
     public override void OnEndSpaceAction(InputAction.CallbackContext context)
     {
-        _playerMovement.RelaseJump();
     }
 }

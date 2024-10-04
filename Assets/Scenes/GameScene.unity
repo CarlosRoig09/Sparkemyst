@@ -259,24 +259,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 980a004a804c3854da06e6e94c4a400f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentState: {fileID: 11400000, guid: 720173f620a658145bd0daa2206aa360, type: 2}
+  currentState: {fileID: 11400000, guid: 762bbce35a2512e42b74c50e0fabefd4, type: 2}
   Lstates:
-  - {fileID: 11400000, guid: 720173f620a658145bd0daa2206aa360, type: 2}
-  - {fileID: 11400000, guid: 7e8e13ce2fac8444c860171f6b847933, type: 2}
-  - {fileID: 11400000, guid: 4ebb7ce2401fab3488755a8a0d7683b8, type: 2}
+  - {fileID: 11400000, guid: 762bbce35a2512e42b74c50e0fabefd4, type: 2}
+  - {fileID: 11400000, guid: 4d74d1dd9c6b2e0488cac9a3ed2f11e9, type: 2}
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
-  _minSpeed: 10
   _maxSpeed: 200
   _speed: 0
-  _timeBwSpeedStart: 0.5
-  _timeBwSpeedEnd: 0.3
+  _desiredAccTime: 0.5
+  _desiredDccTime: 0.3
   _jumpForce: 0
   _gravity: 0
   _maxHeight: 10
   _minHeight: 2
   _timeBwJumps: 1
+  _jumpHeight: 0
 --- !u!1 &564095211
 GameObject:
   m_ObjectHideFlags: 0

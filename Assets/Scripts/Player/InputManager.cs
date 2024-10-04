@@ -107,17 +107,22 @@ public class InputManager : MonoBehaviour
 
     void OnStartMovement(InputAction.CallbackContext context)
     {
+        ((ScriptablePlayerAction)_playerMovement.currentState.Action).OnStartADAction(context);
     }
 
     void OnEndMovement(InputAction.CallbackContext context)
     {
+        ((ScriptablePlayerAction)_playerMovement.currentState.Action).OnEndADAction(context);
     }
 
     void OnStartJump(InputAction.CallbackContext context)
     {
+        ((ScriptablePlayerAction)_playerMovement.currentState.Action).OnStartSpaceAction(context);
     }
 
     void OnEndJump(InputAction.CallbackContext context)
     {
+        ((ScriptablePlayerAction)_playerMovement.currentState.Action).OnEndSpaceAction(context);
+
     }
 }
